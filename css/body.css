@@ -3,18 +3,21 @@ body {
   background-color: #b2c5cd;
   margin: 0;
   padding: 0;
+  line-height: 1.6;
 }
 
 h1 {
   color: #333;
   text-align: center;
   margin-top: 50px;
+  margin: 0.5em 0;
 }
 
 h2 {
   color: #333;
   text-align: center;
   margin-top: 20px;
+  margin: 0.5em 0;
 }
 
 h3 {
@@ -22,7 +25,10 @@ h3 {
   /* text-align: center; */
   margin-top: 20px;
 }
-
+/* Responsive layout */
+#blog-posts {
+  padding: 1em;
+}
 p {
   color: #666;
   text-align: center;
@@ -32,9 +38,33 @@ p {
 article {
   width: 80%;
   margin: 0 auto;
+  margin-bottom: 1em;
   background-color: #fff;
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  
+}
+/* Media Queries for responsiveness */
+@media (max-width: 600px) {
+  body {
+    padding: 1em;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  h2 {
+    font-size: 1.2em;
+  }
+
+  h3 {
+    font-size: 1em;
+  }
+
+  p {
+    font-size: 0.9em;
+  }
 }
