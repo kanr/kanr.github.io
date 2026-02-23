@@ -1,0 +1,157 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+import type { MarkdownInstance } from 'astro';
+
+interface Post {
+  url: string;
+  frontmatter: {
+    title: string;
+    description: string;
+    pubDate: Date;
+    author?: string;
+    image?: string;
+    tags?: string[];
+  };
+}
+
+const posts = (await Astro.glob('../posts/*.md')) as MarkdownInstance<Record<string, any>>[];
+
+const sortedPosts = posts
+  .map((post) => ({
+    url: post.url,
+    frontmatter: post.frontmatter,
+  }))
+  .sort((a, b) => new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime());
+---
+
+<Layout title="Blog" description="Read my latest blog posts">
+  <main class="blog-main">
+    <h1>Blog</h1>
+    <p class="intro">Thoughts, tutorials, and updates about web development and technology.</p>
+
+    {sortedPosts.length === 0 ? (
+      <p class="no-posts">No blog posts yet. Check back soon!</p>
+    ) : (
+      <div class="posts-grid">
+        {sortedPosts.map((post) => (
+          <a href={post.url} class="post-card-link">
+            <Card title={post.frontmatter.title}>
+              <p class="post-description">{post.frontmatter.description}</p>
+              <div class="post-footer">
+                <span class="post-date">
+                  {new Date(post.frontmatter.pubDate).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </span>
+                {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
+                  <div class="post-tags">
+                    {post.frontmatter.tags.slice(0, 2).map((tag: string) => (
+                      <span class="tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </Card>
+          </a>
+        ))}
+      </div>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .blog-main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    color: rgb(var(--accent));
+  }
+
+  .intro {
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 3rem;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .post-card-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .post-card-link:hover {
+    transform: translateY(-4px);
+  }
+
+  .post-card-link :global(.card) {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-description {
+    flex-grow: 1;
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: 1rem;
+  }
+
+  .post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .post-date {
+    font-size: 0.9rem;
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .post-tags {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    background: rgba(var(--accent), 0.1);
+    color: rgb(var(--accent));
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .no-posts {
+    text-align: center;
+    color: rgba(0, 0, 0, 0.5);
+    padding: 3rem 1rem;
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

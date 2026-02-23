@@ -1,0 +1,42 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import type { MarkdownInstance } from 'astro';
+
+interface Post {
+  frontmatter: {
+    title: string;
+    description: string;
+    pubDate: Date;
+    author?: string;
+    image?: string;
+    tags?: string[];
+  };
+  url: string;
+}
+
+export async function getStaticPaths() {
+  const posts = (await Astro.glob('../../posts/*.md')) as MarkdownInstance<Record<string, any>>[];
+  
+  return posts.map((post) => ({
+    params: { slug: post.url?.split('/').pop()?.replace('.html', '') },
+    props: post,
+  }));
+}
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+    pubDate: Date;
+    author?: string;
+    image?: string;
+    tags?: string[];
+  };
+}
+
+const { frontmatter } = Astro.props as Props;
+---
+
+<BlogLayout {...frontmatter}>
+  <slot />
+</BlogLayout>
