@@ -35,6 +35,9 @@ import Layout from '../layouts/Layout.astro';
       To get started, open the directory <code>src/pages</code> in your project.<br />
       <strong>Code Challenge:</strong> Integrate <a href="https://docs.astro.build/en/guides/integrations-guide/">an official integration</a>.
     </p>
+    <nav class="nav-links">
+      <a href="/blog" class="nav-link">Read the Blog</a>
+    </nav>
   </main>
 </Layout>
 
@@ -66,5 +69,31 @@ import Layout from '../layouts/Layout.astro';
     font-size: 1.2rem;
     text-align: center;
     color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 2rem;
+  }
+  .nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .nav-link {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    border: 2px solid rgb(var(--accent));
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .nav-link:hover {
+    background: rgb(var(--accent));
+    -webkit-text-fill-color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--accent), 0.3);
   }
 </style>
