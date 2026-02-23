@@ -11,7 +11,7 @@ interface Post {
     image?: string;
     tags?: string[];
   };
-  url: string;
+  default: any;
 }
 
 export async function getStaticPaths() {
@@ -35,11 +35,12 @@ interface Props {
     image?: string;
     tags?: string[];
   };
+  default: any;
 }
 
-const { frontmatter } = Astro.props as Props;
+const { frontmatter, default: Content } = Astro.props as Props;
 ---
 
 <BlogLayout {...frontmatter}>
-  <slot />
+  <Content />
 </BlogLayout>
