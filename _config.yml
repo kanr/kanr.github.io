@@ -1,0 +1,18 @@
+# GitHub Pages configuration for Astro site
+# This prevents Jekyll from processing Astro source files
+
+exclude:
+  - src/
+  - node_modules/
+  - dist/
+  - .astro/
+  - npm-debug.log
+  - '*.map'
+  - '*.md'
+
+include:
+  - public/
+
+# Disable Jekyll themes and processing
+theme: null
+plugins: []
