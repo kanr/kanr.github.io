@@ -18,10 +18,14 @@ interface Post {
 const posts = (await Astro.glob('../../posts/*.md')) as MarkdownInstance<Record<string, any>>[];
 
 const sortedPosts = posts
-  .map((post) => ({
-    url: post.url,
-    frontmatter: post.frontmatter,
-  }))
+  .map((post) => {
+    const slug = (post.file as string).split('/').pop()?.replace('.md', '') || '';
+    return {
+      slug,
+      url: `/blog/${slug}/`,
+      frontmatter: post.frontmatter,
+    };
+  })
   .sort((a, b) => new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime());
 ---
 
