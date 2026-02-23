@@ -20,6 +20,9 @@ const { title, description = 'A website built with Astro' } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
+    <nav class="site-nav">
+      <a href="/" class="nav-home">← Home</a>
+    </nav>
     <slot />
   </body>
 </html>
@@ -38,5 +41,23 @@ const { title, description = 'A website built with Astro' } = Astro.props;
 
   code {
     font-family: Menlo, Monaco, 'Courier New', monospace;
+  }
+
+  .site-nav {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-home {
+    display: inline-block;
+    color: rgb(var(--accent));
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .nav-home:hover {
+    color: rgb(var(--accent-dark));
+    transform: translateX(-4px);
   }
 </style>
