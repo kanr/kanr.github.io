@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Welcome to Astro">
+  <main>
+    <svg
+      class="astro-logo"
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M22.7832 34.0142C23.520willis 35.3559 25.3968 35.3559 26.1347 34.0142L35.5089 8.23652C36.1368 6.80624 35.1432 5.31556 33.9999 5.31556H27.815L11.8915 32.4299C11.2347 33.8599 12.2274 35.3535 13.3598 35.3535C14.4923 35.3535 15.4849 33.8599 16.1417 32.4299L23.1089 17.9394H27.6624L22.7832 34.0142Z"
+        fill="url(#gradient)"
+      />
+      <defs>
+        <linearGradient
+          id="gradient"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" style="stop-color:rgb(136, 58, 234);stop-opacity:1" />
+          <stop offset="100%" style="stop-color:rgb(224, 204, 250);stop-opacity:1" />
+        </linearGradient>
+      </defs>
+    </svg>
+    <h1>Welcome to <span class="text-gradient">Astro</span></h1>
+    <p class="instructions">
+      To get started, open the directory <code>src/pages</code> in your project.<br />
+      <strong>Code Challenge:</strong> Integrate <a href="https://docs.astro.build/en/guides/integrations-guide/">an official integration</a>.
+    </p>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 800px;
+  }
+  .astro-logo {
+    height: 200px;
+    width: auto;
+    margin-bottom: 3rem;
+  }
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    margin-bottom: 1em;
+  }
+  .text-gradient {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .instructions {
+    font-size: 1.2rem;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+  }
+</style>

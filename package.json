@@ -1,0 +1,27 @@
+{
+  "name": "kanr-portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio website built with Astro",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "keywords": [
+    "astro",
+    "portfolio",
+    "website"
+  ],
+  "author": "kanr",
+  "license": "MIT",
+  "dependencies": {
+    "astro": "^4.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.3.4",
+    "@types/node": "^20.10.6",
+    "typescript": "^5.3.3"
+  }
+}
