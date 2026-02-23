@@ -1,6 +1,6 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/Card.astro';
 import type { MarkdownInstance } from 'astro';
 
 interface Post {
@@ -15,7 +15,7 @@ interface Post {
   };
 }
 
-const posts = (await Astro.glob('../posts/*.md')) as MarkdownInstance<Record<string, any>>[];
+const posts = (await Astro.glob('../../posts/*.md')) as MarkdownInstance<Record<string, any>>[];
 
 const sortedPosts = posts
   .map((post) => ({

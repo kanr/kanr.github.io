@@ -17,10 +17,13 @@ interface Post {
 export async function getStaticPaths() {
   const posts = (await Astro.glob('../../posts/*.md')) as MarkdownInstance<Record<string, any>>[];
   
-  return posts.map((post) => ({
-    params: { slug: post.url?.split('/').pop()?.replace('.html', '') },
-    props: post,
-  }));
+  return posts.map((post) => {
+    const slug = (post.file as string).split('/').pop()?.replace('.md', '') || '';
+    return {
+      params: { slug },
+      props: post,
+    };
+  });
 }
 
 interface Props {

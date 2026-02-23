@@ -4,14 +4,15 @@ import Layout from '../layouts/Layout.astro';
 export interface Props {
   title: string;
   description: string;
-  pubDate: Date;
+  pubDate: Date | string;
   author?: string;
   image?: string;
   tags?: string[];
 }
 
 const { title, description, pubDate, author = 'Anonymous', image, tags = [] } = Astro.props;
-const formattedDate = pubDate.toLocaleDateString('en-US', {
+const date = new Date(pubDate);
+const formattedDate = date.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
