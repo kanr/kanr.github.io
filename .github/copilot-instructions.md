@@ -191,4 +191,12 @@ Common integrations:
 - Use pull requests for code review and merging
 - for commits that are assisted by copilot, include a co-author trailer:
 ```Co-authored-by: GitHub Copilot <copilot@github.com>```
+- always push after commits are accepted
+
+## Github Actions
+- debug github actions by using the gh cli to run them locally:
+```bash
+gh workflow run <workflow-name> --repo <owner/repo> --ref <branch>
+```
+
 

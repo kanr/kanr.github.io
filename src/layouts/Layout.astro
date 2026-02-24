@@ -21,7 +21,13 @@ const { title, description = 'A website built with Astro' } = Astro.props;
   </head>
   <body>
     <nav class="site-nav">
-      <a href="/" class="nav-home">← Home</a>
+      <div class="nav-container">
+        <a href="/" class="nav-link nav-home">← Home</a>
+        <div class="nav-links">
+          <a href="/blog" class="nav-link">Blog</a>
+          <a href="/repos" class="nav-link">Repositories</a>
+        </div>
+      </div>
     </nav>
     <slot />
   </body>
@@ -48,7 +54,20 @@ const { title, description = 'A website built with Astro' } = Astro.props;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
-  .nav-home {
+  .nav-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .nav-link {
     display: inline-block;
     color: rgb(var(--accent));
     text-decoration: none;
@@ -56,8 +75,11 @@ const { title, description = 'A website built with Astro' } = Astro.props;
     transition: all 0.2s;
   }
 
-  .nav-home:hover {
+  .nav-link:hover {
     color: rgb(var(--accent-dark));
+  }
+
+  .nav-home:hover {
     transform: translateX(-4px);
   }
 </style>
