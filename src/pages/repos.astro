@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Enable on-demand rendering - freshness over static speed
-export const prerender = false;
+// Static rendering for GitHub Pages compatibility
+// For Cloudflare: export const prerender = false;
 
 interface GitHubRepo {
   id: number;
