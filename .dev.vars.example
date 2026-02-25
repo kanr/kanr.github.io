@@ -1,0 +1,4 @@
+# Cloudflare environment variables (local development)
+# Copy to .dev.vars for local development
+GITHUB_USERNAME=kanr
+CACHE_MAX_AGE=3600
