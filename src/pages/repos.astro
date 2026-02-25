@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-// Temporarily using static rendering until Cloudflare adapter is installed
-// When ready, set: export const prerender = false;
+// Enable on-demand rendering - freshness over static speed
+export const prerender = false;
 
 interface GitHubRepo {
   id: number;
