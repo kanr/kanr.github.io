@@ -21,7 +21,7 @@ const {
   title, 
   description, 
   pubDate, 
-  author = 'Anonymous', 
+  author = 'kanr', 
   image, 
   tags = [],
   rawContent = '',
@@ -33,9 +33,38 @@ const formattedDate = date.toLocaleDateString('en-US', {
   month: 'long',
   day: 'numeric',
 });
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "datePublished": date.toISOString(),
+  "author": {
+    "@type": "Person",
+    "name": author,
+    "url": "https://kanr.github.io"
+  },
+  "url": `https://kanr.github.io/blog/${slug}/`,
+  ...(image && { "image": `https://kanr.github.io${image}` }),
+  "publisher": {
+    "@type": "Person",
+    "name": "kanr",
+    "url": "https://kanr.github.io"
+  },
+  ...(tags.length > 0 && { "keywords": tags.join(', ') }),
+};
 ---
 
-<Layout title={title} description={description} image={image}>
+<Layout
+  title={title}
+  description={description}
+  image={image}
+  type="article"
+  publishedTime={date.toISOString()}
+  author={author}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
   <article class="blog-post">
     <header class="post-header">
       <a href="/blog" class="back-link">&larr; Back to Blog</a>

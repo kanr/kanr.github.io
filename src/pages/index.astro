@@ -1,8 +1,26 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "kanr",
+  "url": "https://kanr.github.io",
+  "sameAs": [
+    "https://github.com/kanr",
+    "https://linkedin.com/in/kanr",
+    "https://twitter.com/kanr"
+  ],
+  "jobTitle": "Software Developer",
+  "description": "Software developer building things on the web.",
+};
 ---
 
-<Layout title="Welcome to Astro">
+<Layout
+  title="kanr | Software Developer"
+  description="Software developer building things on the web. Exploring web development, open source, and engineering."
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <main>
     <svg
       class="astro-logo"
