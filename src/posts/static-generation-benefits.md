@@ -1,7 +1,7 @@
 ---
 title: "Building Fast Websites with Static Generation"
 description: "Explore the benefits of static generation and how it can improve your website's performance."
-pubDate: new Date("2024-02-15")
+pubDate: 2024-02-15
 author: "Kanr"
 tags: ["performance", "static", "web"]
 ---

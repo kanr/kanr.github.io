@@ -1,7 +1,7 @@
 ---
 title: "Getting Started with Astro"
 description: "Learn how to set up your first Astro project and build blazing-fast websites."
-pubDate: new Date("2024-02-20")
+pubDate: 2024-02-20
 author: "Kanr"
 tags: ["astro", "web development", "tutorial"]
 ---

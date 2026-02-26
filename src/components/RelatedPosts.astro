@@ -1,0 +1,107 @@
+---
+export interface Props {
+  currentSlug: string;
+  currentTags: string[];
+  maxPosts?: number;
+}
+
+interface PostFrontmatter {
+  title: string;
+  description: string;
+  pubDate: Date;
+  tags?: string[];
+}
+
+const { currentSlug, currentTags, maxPosts = 3 } = Astro.props;
+
+// Get all posts
+const posts = import.meta.glob<{ frontmatter: PostFrontmatter }>('../posts/*.md', { eager: true });
+
+// Find related posts based on shared tags
+const relatedPosts = Object.entries(posts)
+  .map(([path, post]) => {
+    const slug = path.split('/').pop()?.replace('.md', '') || '';
+    const sharedTags = post.frontmatter.tags?.filter(tag => currentTags.includes(tag)) || [];
+    return {
+      slug,
+      title: post.frontmatter.title,
+      description: post.frontmatter.description,
+      pubDate: new Date(post.frontmatter.pubDate),
+      sharedTagCount: sharedTags.length,
+    };
+  })
+  .filter(post => post.slug !== currentSlug && post.sharedTagCount > 0)
+  .sort((a, b) => {
+    // Sort by number of shared tags, then by date
+    if (b.sharedTagCount !== a.sharedTagCount) {
+      return b.sharedTagCount - a.sharedTagCount;
+    }
+    return b.pubDate.getTime() - a.pubDate.getTime();
+  })
+  .slice(0, maxPosts);
+---
+
+{relatedPosts.length > 0 && (
+  <aside class="related-posts">
+    <h3>Related Posts</h3>
+    <div class="related-list">
+      {relatedPosts.map((post) => (
+        <a href={`/blog/${post.slug}`} class="related-item">
+          <h4>{post.title}</h4>
+          <p>{post.description}</p>
+        </a>
+      ))}
+    </div>
+  </aside>
+)}
+
+<style>
+  .related-posts {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .related-posts h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+
+  .related-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .related-item {
+    display: block;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .related-item:hover {
+    border-color: rgb(var(--accent));
+    transform: translateX(4px);
+  }
+
+  .related-item h4 {
+    font-size: 1rem;
+    margin: 0 0 0.25rem 0;
+    color: var(--text-primary);
+  }
+
+  .related-item p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

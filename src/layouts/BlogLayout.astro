@@ -1,5 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ReadingTime from '../components/ReadingTime.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import Tags from '../components/Tags.astro';
+import RelatedPosts from '../components/RelatedPosts.astro';
+import GiscusComments from '../components/GiscusComments.astro';
 
 export interface Props {
   title: string;
@@ -8,9 +13,20 @@ export interface Props {
   author?: string;
   image?: string;
   tags?: string[];
+  rawContent?: string;
+  slug?: string;
 }
 
-const { title, description, pubDate, author = 'Anonymous', image, tags = [] } = Astro.props;
+const { 
+  title, 
+  description, 
+  pubDate, 
+  author = 'Anonymous', 
+  image, 
+  tags = [],
+  rawContent = '',
+  slug = ''
+} = Astro.props;
 const date = new Date(pubDate);
 const formattedDate = date.toLocaleDateString('en-US', {
   year: 'numeric',
@@ -19,26 +35,44 @@ const formattedDate = date.toLocaleDateString('en-US', {
 });
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} image={image}>
   <article class="blog-post">
     <header class="post-header">
+      <a href="/blog" class="back-link">&larr; Back to Blog</a>
       {image && <img src={image} alt={title} class="post-image" />}
       <h1>{title}</h1>
       <div class="post-meta">
         <span class="author">By {author}</span>
         <span class="date">{formattedDate}</span>
+        {rawContent && <ReadingTime content={rawContent} />}
       </div>
       {tags.length > 0 && (
-        <div class="tags">
-          {tags.map((tag) => (
-            <span class="tag">{tag}</span>
-          ))}
-        </div>
+        <Tags tags={tags} />
       )}
     </header>
+    
+    {rawContent && (
+      <TableOfContents content={rawContent} />
+    )}
+    
     <main class="post-content">
       <slot />
     </main>
+    
+    {tags.length > 0 && slug && (
+      <RelatedPosts currentSlug={slug} currentTags={tags} />
+    )}
+    
+    <!-- Giscus comments - configure with your repo details -->
+    <!-- Uncomment and add your repo details from https://giscus.app -->
+    <!--
+    <GiscusComments 
+      repo="kanr/kanr.github.io" 
+      repoId="YOUR_REPO_ID"
+      category="Announcements"
+      categoryId="YOUR_CATEGORY_ID"
+    />
+    -->
   </article>
 </Layout>
 
@@ -49,8 +83,20 @@ const formattedDate = date.toLocaleDateString('en-US', {
     padding: 2rem 1rem;
   }
 
+  .back-link {
+    display: inline-block;
+    color: rgb(var(--accent));
+    text-decoration: none;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+
   .post-header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 
   .post-image {
@@ -64,13 +110,14 @@ const formattedDate = date.toLocaleDateString('en-US', {
   h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: rgb(var(--accent));
+    color: var(--text-primary);
   }
 
   .post-meta {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--text-secondary);
     font-size: 0.95rem;
     margin-bottom: 1rem;
   }
@@ -83,22 +130,6 @@ const formattedDate = date.toLocaleDateString('en-US', {
     content: '📅 ';
   }
 
-  .tags {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    display: inline-block;
-    background: rgba(var(--accent), 0.1);
-    color: rgb(var(--accent));
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 500;
-  }
-
   .post-content {
     line-height: 1.8;
     font-size: 1.05rem;
@@ -106,34 +137,44 @@ const formattedDate = date.toLocaleDateString('en-US', {
 
   :global(.post-content h2) {
     font-size: 1.8rem;
-    margin-top: 2rem;
+    margin-top: 2.5rem;
     margin-bottom: 1rem;
     color: rgb(var(--accent));
+    scroll-margin-top: 80px;
   }
 
   :global(.post-content h3) {
     font-size: 1.4rem;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     margin-bottom: 0.8rem;
+    scroll-margin-top: 80px;
   }
 
   :global(.post-content p) {
     margin-bottom: 1rem;
+    color: var(--text-primary);
   }
 
   :global(.post-content code) {
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--bg-secondary);
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-family: 'Courier New', monospace;
+    font-size: 0.9em;
   }
 
   :global(.post-content pre) {
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--bg-secondary);
     padding: 1rem;
     border-radius: 8px;
     overflow-x: auto;
     margin-bottom: 1rem;
+    border: 1px solid var(--border-color);
+  }
+
+  :global(.post-content pre code) {
+    background: none;
+    padding: 0;
   }
 
   :global(.post-content ul),
@@ -144,6 +185,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
 
   :global(.post-content li) {
     margin-bottom: 0.5rem;
+    color: var(--text-primary);
   }
 
   :global(.post-content blockquote) {
@@ -152,6 +194,36 @@ const formattedDate = date.toLocaleDateString('en-US', {
     margin-left: 0;
     margin-bottom: 1rem;
     font-style: italic;
-    color: rgba(0, 0, 0, 0.7);
+    color: var(--text-secondary);
+  }
+
+  :global(.post-content a) {
+    color: rgb(var(--accent));
+    text-decoration: none;
+  }
+
+  :global(.post-content a:hover) {
+    text-decoration: underline;
+  }
+
+  :global(.post-content img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+  }
+
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    :global(.post-content h2) {
+      font-size: 1.5rem;
+    }
+
+    :global(.post-content h3) {
+      font-size: 1.2rem;
+    }
   }
 </style>

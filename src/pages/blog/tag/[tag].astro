@@ -1,0 +1,201 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Tags from '../../../components/Tags.astro';
+
+interface PostFrontmatter {
+  title: string;
+  description: string;
+  pubDate: Date;
+  author?: string;
+  tags?: string[];
+}
+
+export async function getStaticPaths() {
+  const posts = import.meta.glob<{ frontmatter: PostFrontmatter }>('../../posts/*.md', { eager: true });
+  
+  // Get all unique tags
+  const allTags = new Set<string>();
+  Object.values(posts).forEach(post => {
+    post.frontmatter.tags?.forEach(tag => allTags.add(tag));
+  });
+
+  return Array.from(allTags).map(tag => ({
+    params: { tag },
+    props: { 
+      tag,
+      posts: Object.entries(posts)
+        .filter(([_, post]) => post.frontmatter.tags?.includes(tag))
+        .map(([path, post]) => ({
+          slug: path.split('/').pop()?.replace('.md', ''),
+          ...post.frontmatter,
+        }))
+        .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+    },
+  }));
+}
+
+interface Props {
+  tag: string;
+  posts: Array<PostFrontmatter & { slug: string }>;
+}
+
+const { tag, posts } = Astro.props;
+
+// Get all tags for the tags component
+const allPosts = import.meta.glob<{ frontmatter: PostFrontmatter }>('../../posts/*.md', { eager: true });
+const allTags = Array.from(new Set(
+  Object.values(allPosts).flatMap(post => post.frontmatter.tags || [])
+)).sort();
+---
+
+<Layout title={`Posts tagged #${tag}`} description={`All blog posts tagged with ${tag}`}>
+  <main>
+    <header class="tag-header">
+      <a href="/blog" class="back-link">&larr; All Posts</a>
+      <h1>Posts tagged <span class="tag-highlight">#{tag}</span></h1>
+      <p class="tag-count">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
+    </header>
+
+    <section class="all-tags">
+      <h3>All Tags</h3>
+      <Tags tags={allTags} activeTag={tag} />
+    </section>
+
+    <section class="posts">
+      {posts.map((post) => (
+        <article class="post-card">
+          <div class="post-meta">
+            <time datetime={new Date(post.pubDate).toISOString()}>
+              {new Date(post.pubDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+          </div>
+          <h2><a href={`/blog/${post.slug}`}>{post.title}</a></h2>
+          <p>{post.description}</p>
+          {post.tags && (
+            <div class="post-tags">
+              {post.tags.map(t => (
+                <a href={`/blog/tag/${t}`} class={`post-tag ${t === tag ? 'active' : ''}`}>#{t}</a>
+              ))}
+            </div>
+          )}
+        </article>
+      ))}
+    </section>
+  </main>
+</Layout>
+
+<style>
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: rgb(var(--accent));
+    text-decoration: none;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+
+  .tag-header {
+    margin-bottom: 2rem;
+  }
+
+  .tag-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tag-highlight {
+    color: rgb(var(--accent));
+  }
+
+  .tag-count {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+  }
+
+  .all-tags {
+    margin-bottom: 2.5rem;
+  }
+
+  .all-tags h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+  }
+
+  .posts {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .post-card {
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: all 0.2s;
+  }
+
+  .post-card:hover {
+    border-color: rgb(var(--accent));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-meta {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+
+  .post-card h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.3rem;
+  }
+
+  .post-card h2 a {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .post-card h2 a:hover {
+    color: rgb(var(--accent));
+  }
+
+  .post-card p {
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.6;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .post-tag {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  .post-tag:hover, .post-tag.active {
+    color: rgb(var(--accent));
+  }
+</style>

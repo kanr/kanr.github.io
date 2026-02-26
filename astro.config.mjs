@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 // Cloudflare adapter disabled for GitHub Pages (static hosting only)
 // Uncomment for Cloudflare deployment:
 // import cloudflare from '@astrojs/cloudflare';
@@ -12,7 +13,7 @@ export default defineConfig({
   //     enabled: true,
   //   },
   // }),
-  integrations: [],
+  integrations: [sitemap()],
   vite: {
     ssr: {
       external: ['svgo'],

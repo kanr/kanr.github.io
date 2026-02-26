@@ -12,6 +12,7 @@ interface Post {
     tags?: string[];
   };
   default: any;
+  rawContent: () => string;
 }
 
 export async function getStaticPaths() {
@@ -21,7 +22,7 @@ export async function getStaticPaths() {
     const slug = (post.file as string).split('/').pop()?.replace('.md', '') || '';
     return {
       params: { slug },
-      props: post,
+      props: { ...post, slug },
     };
   });
 }
@@ -36,11 +37,14 @@ interface Props {
     tags?: string[];
   };
   default: any;
+  rawContent: () => string;
+  slug: string;
 }
 
-const { frontmatter, default: Content } = Astro.props as Props;
+const { frontmatter, default: Content, rawContent, slug } = Astro.props;
+const raw = rawContent();
 ---
 
-<BlogLayout {...frontmatter}>
+<BlogLayout {...frontmatter} rawContent={raw} slug={slug}>
   <Content />
 </BlogLayout>

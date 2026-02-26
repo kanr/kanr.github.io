@@ -1,0 +1,70 @@
+---
+/**
+ * Analytics Component
+ * 
+ * Supports multiple analytics providers. Configure by uncommenting
+ * the appropriate section and adding your tracking ID.
+ * 
+ * Supported providers:
+ * - Google Analytics 4
+ * - Plausible Analytics
+ * - Umami Analytics
+ * - Fathom Analytics
+ */
+
+export interface Props {
+  googleAnalyticsId?: string;
+  plausibleDomain?: string;
+  umamiWebsiteId?: string;
+  umamiScriptUrl?: string;
+  fathomSiteId?: string;
+}
+
+const { 
+  googleAnalyticsId,
+  plausibleDomain,
+  umamiWebsiteId,
+  umamiScriptUrl = 'https://analytics.umami.is/script.js',
+  fathomSiteId
+} = Astro.props;
+---
+
+{/* Google Analytics 4 */}
+{googleAnalyticsId && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}></script>
+    <script is:inline define:vars={{ googleAnalyticsId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', googleAnalyticsId);
+    </script>
+  </>
+)}
+
+{/* Plausible Analytics - Privacy-friendly */}
+{plausibleDomain && (
+  <script 
+    defer 
+    data-domain={plausibleDomain} 
+    src="https://plausible.io/js/script.js"
+  ></script>
+)}
+
+{/* Umami Analytics - Privacy-friendly, self-hostable */}
+{umamiWebsiteId && (
+  <script 
+    async 
+    src={umamiScriptUrl}
+    data-website-id={umamiWebsiteId}
+  ></script>
+)}
+
+{/* Fathom Analytics - Privacy-friendly */}
+{fathomSiteId && (
+  <script 
+    src="https://cdn.usefathom.com/script.js" 
+    data-site={fathomSiteId} 
+    defer
+  ></script>
+)}

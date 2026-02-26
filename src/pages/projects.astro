@@ -1,0 +1,268 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+interface Project {
+  title: string;
+  description: string;
+  image?: string;
+  tech: string[];
+  github?: string;
+  demo?: string;
+  featured?: boolean;
+}
+
+const projects: Project[] = [
+  {
+    title: 'Portfolio Website',
+    description: 'A modern personal portfolio built with Astro, featuring a blog, project showcase, and GitHub integration. Deployed on GitHub Pages with automated CI/CD.',
+    tech: ['Astro', 'TypeScript', 'CSS', 'GitHub Actions'],
+    github: 'https://github.com/kanr/kanr.github.io',
+    demo: 'https://kanr.github.io',
+    featured: true,
+  },
+  {
+    title: 'Project Two',
+    description: 'A full-stack web application with real-time features. Built with modern technologies and deployed to the cloud.',
+    tech: ['React', 'Node.js', 'PostgreSQL', 'Docker'],
+    github: 'https://github.com/kanr/project-two',
+    featured: true,
+  },
+  {
+    title: 'Open Source Contribution',
+    description: 'Contributed to various open source projects, including bug fixes, feature implementations, and documentation improvements.',
+    tech: ['TypeScript', 'Python', 'Go'],
+    github: 'https://github.com/kanr',
+    featured: false,
+  },
+  {
+    title: 'CLI Tool',
+    description: 'A command-line tool that automates common development tasks and improves workflow efficiency.',
+    tech: ['Python', 'Click', 'Rich'],
+    github: 'https://github.com/kanr/cli-tool',
+    featured: false,
+  },
+];
+
+const featuredProjects = projects.filter(p => p.featured);
+const otherProjects = projects.filter(p => !p.featured);
+---
+
+<Layout title="Projects" description="A showcase of my projects and work">
+  <main>
+    <h1>Projects</h1>
+    <p class="intro">A collection of projects I've worked on. Some are professional work, others are personal explorations.</p>
+
+    {featuredProjects.length > 0 && (
+      <section class="featured">
+        <h2>✨ Featured Projects</h2>
+        <div class="featured-grid">
+          {featuredProjects.map((project) => (
+            <article class="project-card featured-card">
+              <div class="project-content">
+                <h3>{project.title}</h3>
+                <p class="description">{project.description}</p>
+                <div class="tech-stack">
+                  {project.tech.map((tech) => (
+                    <span class="tech-tag">{tech}</span>
+                  ))}
+                </div>
+                <div class="project-links">
+                  {project.github && (
+                    <a href={project.github} target="_blank" rel="noopener noreferrer" class="link">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                      </svg>
+                      Code
+                    </a>
+                  )}
+                  {project.demo && (
+                    <a href={project.demo} target="_blank" rel="noopener noreferrer" class="link demo">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      Live Demo
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {otherProjects.length > 0 && (
+      <section class="other">
+        <h2>🗂️ Other Projects</h2>
+        <div class="other-grid">
+          {otherProjects.map((project) => (
+            <article class="project-card">
+              <h3>{project.title}</h3>
+              <p class="description">{project.description}</p>
+              <div class="tech-stack">
+                {project.tech.map((tech) => (
+                  <span class="tech-tag">{tech}</span>
+                ))}
+              </div>
+              <div class="project-links">
+                {project.github && (
+                  <a href={project.github} target="_blank" rel="noopener noreferrer" class="link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    View
+                  </a>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="cta">
+      <p>Want to see more? Check out my <a href="/repos">GitHub repositories</a> for all my public projects.</p>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    color: rgb(var(--accent));
+    margin-bottom: 0.5rem;
+  }
+
+  .intro {
+    font-size: 1.2rem;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 3rem;
+  }
+
+  section {
+    margin-bottom: 3rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    color: rgb(var(--accent-dark));
+    margin-bottom: 1.5rem;
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+  }
+
+  .other-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(var(--accent), 0.15);
+  }
+
+  .featured-card {
+    border: 2px solid rgba(var(--accent), 0.2);
+  }
+
+  .project-card h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1.3rem;
+    color: rgb(var(--accent));
+  }
+
+  .description {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 1rem;
+  }
+
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .tech-tag {
+    background: rgba(var(--accent), 0.1);
+    color: rgb(var(--accent));
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .project-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .link:hover {
+    color: rgb(var(--accent));
+    text-decoration: none;
+  }
+
+  .link.demo {
+    color: rgb(var(--accent));
+  }
+
+  .cta {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(var(--accent), 0.05);
+    border-radius: 12px;
+  }
+
+  .cta a {
+    color: rgb(var(--accent));
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .featured-grid {
+      grid-template-columns: 1fr;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+  }
+</style>
