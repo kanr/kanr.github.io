@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Counter from '../components/Counter.svelte';
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -54,6 +55,7 @@ const jsonLd = {
     <nav class="nav-links">
       <a href="/blog" class="nav-link">Read the Blog</a>
     </nav>
+    <Counter client:load />
   </main>
 </Layout>
 
