@@ -30,7 +30,7 @@
     padding: 1.5rem;
     text-align: center;
     margin: 2rem 0;
-    background: var(--card-bg, #f8fafc);
+    background: var(--bg-secondary, #f8fafc);
   }
   .demo-label {
     font-size: 0.75rem;
@@ -58,6 +58,7 @@
     font-weight: 700;
     min-width: 3rem;
     display: inline-block;
+    color: var(--text-primary, #1e293b);
   }
   button {
     padding: 0.4rem 1rem;
