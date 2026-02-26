@@ -13,10 +13,11 @@ const { title } = Astro.props;
 
 <style>
   .card {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
   }
 
   .card h2 {
