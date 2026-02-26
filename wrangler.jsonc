@@ -19,8 +19,8 @@
   "kv_namespaces": [
     {
       "binding": "VISIT_COUNTER",
-      "id": "YOUR_KV_NAMESPACE_ID",
-      "preview_id": "YOUR_KV_NAMESPACE_PREVIEW_ID"
+      "id": "5c7d98f7a57c45099de6869630a76e5b",
+      "preview_id": "502ce9045d6f4e7f98b6186a464ad1d8"
     }
   ]
 }
