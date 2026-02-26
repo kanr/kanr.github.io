@@ -85,12 +85,14 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
     <nav class="site-nav">
       <div class="nav-container">
         <a href="/" class="nav-brand">kanr</a>
-        <div class="nav-links">
+        <div class="nav-links" id="nav-menu">
           <a href="/about" class="nav-link">About</a>
           <a href="/projects" class="nav-link">Projects</a>
           <a href="/blog" class="nav-link">Blog</a>
           <a href="/repos" class="nav-link">Repos</a>
           <a href="/contact" class="nav-link">Contact</a>
+        </div>
+        <div class="nav-actions">
           <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
             <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="5"></circle>
@@ -105,6 +107,17 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
             </svg>
             <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+          <button id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-menu">
+            <svg class="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </button>
         </div>
@@ -160,6 +173,7 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
     </footer>
     
     <script>
+      // Theme toggle
       const themeToggle = document.getElementById('theme-toggle');
       
       function setTheme(theme: string) {
@@ -170,6 +184,35 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
       themeToggle?.addEventListener('click', () => {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+      });
+
+      // Mobile hamburger menu
+      const navToggle = document.getElementById('nav-toggle');
+      const navMenu = document.getElementById('nav-menu');
+
+      navToggle?.addEventListener('click', () => {
+        const isOpen = navMenu?.classList.toggle('open');
+        navToggle.classList.toggle('open', isOpen);
+        navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+
+      // Close menu when a link is clicked
+      navMenu?.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          navMenu.classList.remove('open');
+          navToggle?.classList.remove('open');
+          navToggle?.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        const nav = document.querySelector('.site-nav');
+        if (nav && !nav.contains(e.target as Node) && navMenu?.classList.contains('open')) {
+          navMenu.classList.remove('open');
+          navToggle?.classList.remove('open');
+          navToggle?.setAttribute('aria-expanded', 'false');
+        }
       });
     </script>
   </body>
@@ -210,12 +253,18 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
     background-color: var(--bg-primary);
     color: var(--text-primary);
     transition: background-color 0.3s, color 0.3s;
+    box-sizing: border-box;
+  }
+
+  *, *::before, *::after {
+    box-sizing: inherit;
   }
 
   body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
   }
 
   code {
@@ -224,7 +273,7 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
 
   /* Navigation */
   .site-nav {
-    padding: 1rem 1.5rem;
+    padding: 0 1.5rem;
     border-bottom: 1px solid var(--border-color);
     background: var(--bg-secondary);
     position: sticky;
@@ -238,6 +287,7 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 60px;
   }
 
   .nav-brand {
@@ -245,6 +295,7 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
     font-weight: 700;
     color: rgb(var(--accent));
     text-decoration: none;
+    flex-shrink: 0;
   }
 
   .nav-links {
@@ -259,11 +310,21 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
     font-weight: 500;
     font-size: 0.95rem;
     transition: color 0.2s;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
   }
 
   .nav-link:hover {
     color: rgb(var(--accent));
     text-decoration: none;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
   }
 
   /* Theme Toggle */
@@ -278,11 +339,46 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
   }
 
   .theme-toggle:hover {
     background: var(--border-color);
     color: rgb(var(--accent));
+  }
+
+  /* Hamburger toggle button */
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .nav-toggle:hover {
+    background: var(--border-color);
+    color: rgb(var(--accent));
+  }
+
+  .nav-toggle .close-icon {
+    display: none;
+  }
+
+  .nav-toggle.open .hamburger-icon {
+    display: none;
+  }
+
+  .nav-toggle.open .close-icon {
+    display: block;
   }
 
   [data-theme="light"] .moon-icon {
@@ -346,6 +442,12 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
   .social-links a {
     color: var(--text-secondary);
     transition: color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 8px;
   }
 
   .social-links a:hover {
@@ -380,20 +482,55 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
 
   /* Mobile navigation */
   @media (max-width: 768px) {
+    .nav-toggle {
+      display: flex;
+    }
+
     .nav-links {
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      padding: 0.5rem 0;
+      z-index: 99;
+    }
+
+    .nav-links.open {
+      display: flex;
     }
 
     .nav-link {
-      font-size: 0.85rem;
+      font-size: 1rem;
+      padding: 0.875rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      min-height: 52px;
+    }
+
+    .nav-link:last-child {
+      border-bottom: none;
     }
 
     .footer-bottom {
       flex-direction: column;
       gap: 0.5rem;
       text-align: center;
+    }
+
+    .footer-content {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .site-nav {
+      padding: 0 1rem;
     }
   }
 </style>
