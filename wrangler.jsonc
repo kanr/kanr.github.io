@@ -12,5 +12,15 @@
   },
   "observability": {
     "enabled": true
-  }
+  },
+  // Visit counter KV namespace.
+  // Create one with: npx wrangler kv namespace create VISIT_COUNTER
+  // Then replace the id below with the output ID.
+  "kv_namespaces": [
+    {
+      "binding": "VISIT_COUNTER",
+      "id": "YOUR_KV_NAMESPACE_ID",
+      "preview_id": "YOUR_KV_NAMESPACE_PREVIEW_ID"
+    }
+  ]
 }

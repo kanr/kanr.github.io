@@ -1,0 +1,68 @@
+---
+export interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<span class="visit-counter" data-slug={slug} aria-label="View count">
+  <svg
+    class="eye-icon"
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+  <span class="views-count">—</span>
+</span>
+
+<script>
+  const counters = document.querySelectorAll<HTMLElement>('.visit-counter');
+
+  counters.forEach((counter) => {
+    const slug = counter.dataset.slug;
+    if (!slug) return;
+
+    const sessionKey = `viewed:${slug}`;
+    const method = sessionStorage.getItem(sessionKey) ? 'GET' : 'POST';
+
+    fetch(`/api/views/${slug}`, { method })
+      .then((r) => r.json())
+      .then(({ views }: { views: number }) => {
+        const el = counter.querySelector('.views-count');
+        if (el) el.textContent = views.toLocaleString();
+        if (method === 'POST') sessionStorage.setItem(sessionKey, '1');
+      })
+      .catch(() => {
+        counter.style.display = 'none';
+      });
+  });
+</script>
+
+<style>
+  .visit-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    color: var(--text-muted, #888);
+  }
+
+  .eye-icon {
+    flex-shrink: 0;
+  }
+
+  .views-count {
+    font-variant-numeric: tabular-nums;
+  }
+</style>
