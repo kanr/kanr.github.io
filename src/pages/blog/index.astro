@@ -1,7 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Card from '../../components/Card.astro';
-import Tags from '../../components/Tags.astro';
+import BlogSearch from '../../components/BlogSearch.svelte';
 import type { MarkdownInstance } from 'astro';
 
 interface Post {
@@ -28,11 +27,6 @@ const sortedPosts = posts
     };
   })
   .sort((a, b) => new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime());
-
-// Get all unique tags
-const allTags = Array.from(new Set(
-  sortedPosts.flatMap(post => post.frontmatter.tags || [])
-)).sort();
 ---
 
 <Layout title="Blog" description="Read my latest blog posts">
@@ -48,42 +42,17 @@ const allTags = Array.from(new Set(
       </a>
     </header>
 
-    {allTags.length > 0 && (
-      <section class="tags-section">
-        <h2>Browse by Tag</h2>
-        <Tags tags={allTags} />
-      </section>
-    )}
-
-    {sortedPosts.length === 0 ? (
-      <p class="no-posts">No blog posts yet. Check back soon!</p>
-    ) : (
-      <div class="posts-grid">
-        {sortedPosts.map((post) => (
-          <a href={post.url} class="post-card-link">
-            <Card title={post.frontmatter.title}>
-              <p class="post-description">{post.frontmatter.description}</p>
-              <div class="post-footer">
-                <span class="post-date">
-                  {new Date(post.frontmatter.pubDate).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </span>
-                {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
-                  <div class="post-tags">
-                    {post.frontmatter.tags.slice(0, 2).map((tag: string) => (
-                      <span class="tag">{tag}</span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </Card>
-          </a>
-        ))}
-      </div>
-    )}
+    <BlogSearch
+      client:load
+      posts={sortedPosts.map((p) => ({
+        slug: p.slug,
+        url: p.url,
+        title: p.frontmatter.title,
+        description: p.frontmatter.description,
+        pubDate: String(p.frontmatter.pubDate),
+        tags: p.frontmatter.tags ?? [],
+      }))}
+    />
   </main>
 </Layout>
 

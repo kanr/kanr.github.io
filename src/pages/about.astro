@@ -1,12 +1,49 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SkillBars from '../components/SkillBars.svelte';
 
-const skills = {
-  languages: ['TypeScript', 'JavaScript', 'Python', 'HTML/CSS'],
-  frameworks: ['Astro', 'React', 'Node.js', 'Next.js'],
-  tools: ['Git', 'VS Code', 'Docker', 'GitHub Actions'],
-  interests: ['Web Development', 'Open Source', 'Cloud Computing', 'DevOps'],
-};
+const skillCategories = [
+  {
+    category: 'Languages',
+    emoji: '💬',
+    skills: [
+      { name: 'TypeScript', level: 90 },
+      { name: 'JavaScript', level: 95 },
+      { name: 'Python', level: 75 },
+      { name: 'HTML / CSS', level: 92 },
+    ],
+  },
+  {
+    category: 'Frameworks',
+    emoji: '🧩',
+    skills: [
+      { name: 'Astro', level: 88 },
+      { name: 'React', level: 85 },
+      { name: 'Node.js', level: 80 },
+      { name: 'Next.js', level: 78 },
+    ],
+  },
+  {
+    category: 'Tools',
+    emoji: '🛠️',
+    skills: [
+      { name: 'Git', level: 90 },
+      { name: 'VS Code', level: 95 },
+      { name: 'Docker', level: 70 },
+      { name: 'GitHub Actions', level: 80 },
+    ],
+  },
+  {
+    category: 'Interests',
+    emoji: '🌐',
+    skills: [
+      { name: 'Web Development', level: 95 },
+      { name: 'Open Source', level: 85 },
+      { name: 'Cloud Computing', level: 72 },
+      { name: 'DevOps', level: 68 },
+    ],
+  },
+];
 
 const experience = [
   {
@@ -50,32 +87,7 @@ const experience = [
 
     <section class="skills">
       <h2>🛠️ Skills & Technologies</h2>
-      <div class="skills-grid">
-        <div class="skill-category">
-          <h3>Languages</h3>
-          <ul>
-            {skills.languages.map((skill) => <li>{skill}</li>)}
-          </ul>
-        </div>
-        <div class="skill-category">
-          <h3>Frameworks</h3>
-          <ul>
-            {skills.frameworks.map((skill) => <li>{skill}</li>)}
-          </ul>
-        </div>
-        <div class="skill-category">
-          <h3>Tools</h3>
-          <ul>
-            {skills.tools.map((skill) => <li>{skill}</li>)}
-          </ul>
-        </div>
-        <div class="skill-category">
-          <h3>Interests</h3>
-          <ul>
-            {skills.interests.map((skill) => <li>{skill}</li>)}
-          </ul>
-        </div>
-      </div>
+      <SkillBars client:visible categories={skillCategories} />
     </section>
 
     <section class="experience">

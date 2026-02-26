@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ContactForm from '../components/ContactForm.svelte';
 
 const socialLinks = [
   {
@@ -54,6 +55,8 @@ const socialLinks = [
         I'd love to hear from you!
       </p>
     </section>
+
+    <ContactForm client:load />
 
     <section class="response-time">
       <h2>⏱️ Response Time</h2>
