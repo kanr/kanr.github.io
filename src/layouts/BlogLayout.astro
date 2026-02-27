@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ReadingTime from '../components/ReadingTime.astro';
+import ReadingProgress from '../components/ReadingProgress.svelte';
 import TableOfContents from '../components/TableOfContents.astro';
 import Tags from '../components/Tags.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
@@ -65,6 +66,7 @@ const articleJsonLd = {
   author={author}
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleJsonLd)} />
+  <ReadingProgress client:load />
   <article class="blog-post">
     <header class="post-header">
       <a href="/blog" class="back-link">&larr; Back to Blog</a>
