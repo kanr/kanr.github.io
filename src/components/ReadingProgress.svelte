@@ -1,15 +1,13 @@
-<script lang="ts">
-  import { onMount } from 'svelte';
-
+<script>
   let progress = $state(0);
 
-  onMount(() => {
+  $effect(() => {
     const article = document.querySelector('article');
 
     function update() {
       const scrollTop = window.scrollY;
-      const docHeight = (article?.offsetHeight ?? document.body.scrollHeight) - window.innerHeight;
       const articleTop = article?.offsetTop ?? 0;
+      const docHeight = (article?.offsetHeight ?? document.body.scrollHeight) - window.innerHeight;
       const scrolled = scrollTop - articleTop;
       progress = docHeight > 0 ? Math.min(100, Math.max(0, (scrolled / docHeight) * 100)) : 0;
     }
