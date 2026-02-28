@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.svelte';
+import CookieConsent from '../components/CookieConsent.svelte';
 
 interface Props {
   title: string;
@@ -10,6 +11,7 @@ interface Props {
   publishedTime?: string;
   author?: string;
   noindex?: boolean;
+  showAds?: boolean;
 }
 
 const {
@@ -20,6 +22,7 @@ const {
   publishedTime,
   author = 'kanr',
   noindex = false,
+  showAds = true,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -63,8 +66,15 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
 
     <title>{pageTitle}</title>
 
+    <!-- Preconnect to ad/analytics domains -->
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+    <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+
     <!-- Google AdSense -->
-    <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789439571468030" crossorigin="anonymous"></script>
+    {showAds && (
+      <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789439571468030" crossorigin="anonymous"></script>
+    )}
 
     <!-- Google Analytics -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-BQHKMX135L"></script>
@@ -156,6 +166,8 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
       </div>
     </footer>
     
+    <CookieConsent client:load />
+
     <script>
       // Mobile hamburger menu
       const navToggle = document.getElementById('nav-toggle');

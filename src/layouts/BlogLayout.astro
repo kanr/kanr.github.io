@@ -85,11 +85,33 @@ const articleJsonLd = {
     {rawContent && (
       <TableOfContents content={rawContent} />
     )}
-    
+
+    <!-- Ad unit: after header -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-3789439571468030"
+        data-ad-slot="auto"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+      <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
     <main class="post-content">
       <slot />
     </main>
-    
+
+    <!-- Ad unit: after article -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-3789439571468030"
+        data-ad-slot="auto"
+        data-ad-format="auto"
+        data-full-width-responsive="true"></ins>
+      <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
     {tags.length > 0 && slug && (
       <RelatedPosts currentSlug={slug} currentTags={tags} />
     )}
@@ -242,6 +264,13 @@ const articleJsonLd = {
     height: auto;
     border-radius: 8px;
     margin: 1.5rem 0;
+  }
+
+  .ad-container {
+    margin: 1.5rem 0;
+    text-align: center;
+    min-height: 100px;
+    overflow: hidden;
   }
 
   @media (max-width: 640px) {
