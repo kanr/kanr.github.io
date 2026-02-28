@@ -63,6 +63,15 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
 
     <title>{pageTitle}</title>
 
+    <!-- Google Analytics -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-BQHKMX135L"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-BQHKMX135L');
+    </script>
+
     <!-- Additional head elements from child pages (e.g. JSON-LD) -->
     <slot name="head" />
     
