@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.svelte';
 import CookieConsent from '../components/CookieConsent.svelte';
+import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
   title: string;
@@ -87,16 +88,23 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
 
     <!-- Additional head elements from child pages (e.g. JSON-LD) -->
     <slot name="head" />
-    
-    <!-- Dark mode script (runs before render to prevent flash) -->
+
+    <!-- View Transitions: SPA-like page animations -->
+    <ViewTransitions />
+
+    <!-- Dark mode script (runs before render and after each view transition swap) -->
     <script is:inline>
-      const theme = localStorage.getItem('theme') || 
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
+      function applyTheme() {
+        const theme = localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      }
+      applyTheme();
+      document.addEventListener('astro:after-swap', applyTheme);
     </script>
   </head>
   <body>
-    <nav class="site-nav">
+    <nav class="site-nav" transition:persist>
       <div class="nav-container">
         <a href="/" class="nav-brand">kanr</a>
         <div class="nav-links" id="nav-menu">
@@ -195,6 +203,13 @@ const pageTitle = isHomepage ? title : `${title} | kanr`;
           navMenu.classList.remove('open');
           navToggle?.classList.remove('open');
           navToggle?.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Re-fire Google Analytics pageview on each view transition navigation
+      document.addEventListener('astro:page-load', () => {
+        if (typeof (window as any).gtag === 'function') {
+          (window as any).gtag('config', 'G-BQHKMX135L', { page_path: location.pathname });
         }
       });
     </script>

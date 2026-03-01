@@ -97,7 +97,7 @@
     {#each filteredPosts as post (post.slug)}
       <a href={post.url} class="post-card-link">
         <article class="card">
-          <h2>{post.title}</h2>
+          <h2 style="view-transition-name: post-title-{post.slug}">{post.title}</h2>
           <p class="post-description">{post.description}</p>
           <div class="post-footer">
             <span class="post-date">{formatDate(post.pubDate)}</span>

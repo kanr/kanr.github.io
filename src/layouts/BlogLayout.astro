@@ -71,7 +71,7 @@ const articleJsonLd = {
     <header class="post-header">
       <a href="/blog" class="back-link">&larr; Back to Blog</a>
       {image && <img src={image} alt={title} class="post-image" />}
-      <h1>{title}</h1>
+      <h1 transition:name={`post-title-${slug}`}>{title}</h1>
       <div class="post-meta">
         <span class="author">By {author}</span>
         <span class="date">{formattedDate}</span>
